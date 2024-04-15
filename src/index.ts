@@ -32,20 +32,20 @@ const nameStorage = StableBTreeMap(0, text, Name);
 export default Canister({
   helloWorld: query([text], Result(text, Error), (name) => {
     if (!name) {
-      return Err({ BadRequest: "Name is required" });
+      return Err({ BadRequest: "Your name is needed!" });
     }
 
-    return Ok(`Hello ${name}`);
+    return Ok(`Hey there, ${name}`);
   }),
   saveName: update([text], Result(text, Error), (name) => {
     if (!name) {
-      return Err({ BadRequest: "Name is required" });
+      return Err({ BadRequest: "Your name is needed!" });
     }
     nameStorage.insert(name, { name, createdAt: ic.time() });
     return Ok(name);
   }),
   getName: query([text], Result(text, Error), (name) => {
     const value = nameStorage.get(name);
-    return value ? Ok(value.Some) : Err({ NotFound: "Name not found" });
+    return value ? Ok(value.Some) : Err({ NotFound: "Can't find a name." });
   }),
 });
